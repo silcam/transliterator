@@ -19,7 +19,8 @@ function find_match(input, input_index){
                */
 
   var transform =  [['ng', 'γγ'],
-                    ['a', 'α', 'Α'],
+                    ['a', 'α', 'ἀ', 0x3AC],
+                    ['A', 'Α'],
                     ['b', 'β', 'Β'],
                     ['d', 'δ', 'Δ'],
                     ['e', 'ε', 'Ε'],
