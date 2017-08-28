@@ -24,8 +24,7 @@ function find_match(input, input_index){
                     ['d', 'δ', 'Δ'],
                     ['e', 'ε', 'Ε'],
                     ['g', 'γ', 'Γ'],
-                    ['h', 0x2018],
-                    ['i', 'ι', 'Ι'],
+                    ['i', 'ι', 'Ι', 0x3AF],
                     ['k', 'κ', 'Κ'],
                     ['l', 'λ', 'Λ'],
                     ['m', 'μ', 'Μ'],
@@ -35,16 +34,23 @@ function find_match(input, input_index){
                     ['r', 'ρ', 'Ρ'],
                     ['s', 'ς', 'σ', 'Σ'],
                     ['t', 'τ', 'Τ'],
-                    ['u', 'υ', 'Υ'],
+                    ['u', 'υ', 'Υ', 'ὐ'],
                     ['x', 'ξ', 'Ξ'],
                     ['y', 0x37A],
                     ['z', 'ζ', 'Ζ'],
                     ['ê', 'η', 'Η'],
-                    ['ô', 'ω', 'Ω'],
+                    ['ô', 'ω', 'Ω', 'ῶ'],
                     ['th', 'θ', 'Θ'],
                     ['ph', 'φ', 'Φ'],
                     ['ps', 'ψ', 'Ψ'],
-                    ['ch', 'χ', 'Χ']];
+                    ['ch', 'χ', 'Χ'],
+                    [' ', ' '],
+                    ['ha'],
+                    ['he'],
+                    ['hê'],
+                    ['ho'],
+                    ['hô'],
+                    ['hu', 'ὑ']];
 /*
   for (var i=0; i<greek.length; i++) {
     for (var j=0; j<greek[i].length; j++){
@@ -68,18 +74,29 @@ function find_match(input, input_index){
 }
 
 function transliterate(input){
-  var outstr = "";
+  var outstr = "<h4>Transliteration</h4>";
   var not_found = [];
   var input_index = 0;
   while(input_index < input.length) {
     results = find_match(input, input_index);
-    if(results[0] == null)
+    if(results[0] == null){
       not_found.push([input.charAt(input_index), input.charCodeAt(input_index)]);
+      outstr += input.charAt(input_index);
+    }
     else
       outstr += results[0];
     input_index = results[1];
   }
   return [outstr, not_found];
+}
+
+function missed_table(not_found){
+  var html = "<h5>Characters Not Found:</h5><table><tr><th>Character</th><th>Code</th></tr>";
+  for(i=0; i<not_found.length; i++){
+    html += "<tr><td>" + not_found[i][0] + "</td><td>0x" + not_found[i][1].toString(16).toUpperCase() + "</td></tr>";
+  }
+  html += "</table>";
+  return html;
 }
 
 $(document).ready(function(){
@@ -88,5 +105,6 @@ $(document).ready(function(){
     input = $('textarea#nonlatin').val();
     var transliteration = transliterate(input);
     $('div#latin').html(transliteration[0]);
+    $('div#missed').html(missed_table(transliteration[1]));
   });
 });
